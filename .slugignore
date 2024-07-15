@@ -1,33 +1,29 @@
-# Ignore virtual environment
+# Python virtual environment
 venv
 
-# Ignore cache and compiled files
+# Cache and compiled Python files
 __pycache__
 *.pyc
 *.pyo
 
-# Ignore local environment variables
+# Local environment variables
 .env
 
-# Ignore git and version control directories
+# Version control directories
 .git
 .gitignore
 
-# Ignore IDE and editor settings
-*.swp
-*.swo
-*.swn
+# IDE and editor settings
 .idea/
 .vscode/
-.DS_Store
 
-# Ignore node modules if you have a frontend
+# Node.js modules (if applicable)
 node_modules
 
-# Ignore data directory if it's large
+# Large data directories
 data
 
-# Ignore build artifacts
+# Build artifacts
 *.egg-info
 *.whl
 build/
