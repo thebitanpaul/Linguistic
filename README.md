@@ -11,6 +11,12 @@ Welcome to the **Linguistic** project! This project leverages multiple TTS (Text
 - **Voice Cloning**: Clone voices by providing a sample `.wav` file.
 - **User-Friendly Interface**: Intuitive web interface to easily interact with the TTS models.
 
+## Working Demo
+
+
+https://github.com/user-attachments/assets/e0cfe8fc-4b78-4611-99fe-620f62f5c3ef
+
+
 ## Technology Stack
 
 - **Backend**: Flask, PyTorch
@@ -102,6 +108,13 @@ Welcome to the **Linguistic** project! This project leverages multiple TTS (Text
 ## License
 
 This project is licensed under the MIT License. See the `LICENSE` file for more information.
+
+## Contributors
+
+Special acknowledgment goes to the following developers and contributors for their invaluable contributions to the web page development:
+- [@imayushsingh](https://github.com/imayushsingh)
+- [@pritzal](https://github.com/pritzal)
+
 
 ## Acknowledgments
 
