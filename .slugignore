@@ -1,0 +1,34 @@
+# Ignore virtual environment
+venv
+
+# Ignore cache and compiled files
+__pycache__
+*.pyc
+*.pyo
+
+# Ignore local environment variables
+.env
+
+# Ignore git and version control directories
+.git
+.gitignore
+
+# Ignore IDE and editor settings
+*.swp
+*.swo
+*.swn
+.idea/
+.vscode/
+.DS_Store
+
+# Ignore node modules if you have a frontend
+node_modules
+
+# Ignore data directory if it's large
+data
+
+# Ignore build artifacts
+*.egg-info
+*.whl
+build/
+dist/
