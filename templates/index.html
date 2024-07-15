@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linguistic: Generative Text to Speech</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.png') }}" type="image/png">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(45deg, #010758, #490d61);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            margin-top: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        #audio-player {
+            margin-top: 1rem;
+        }
+
+        .wave-container {
+            height: 50px;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .wave {
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            margin: 0 2px;
+            animation: wave 1s linear infinite;
+            border-radius: 20px;
+        }
+
+        .wave:nth-child(2) {
+            animation-delay: 0.1s;
+        }
+
+        .wave:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .wave:nth-child(4) {
+            animation-delay: 0.3s;
+        }
+
+        .wave:nth-child(5) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes wave {
+            0% {
+                transform: scale(0);
+            }
+
+            50% {
+                transform: scale(1);
+            }
+
+            100% {
+                transform: scale(0);
+            }
+        }
+
+        /* Navigation bar styles */
+        .navbar {
+            width: 100%;
+            font-size: larger;
+            padding: 1rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .navbar h1 {
+            color: white;
+            margin-left: 1rem;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+        .navbar a:hover {
+            background-color: #555;
+        }
+
+        /* Styling for both buttons */
+        .navbar .button {
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .navbar .button:hover {
+            background-color: #555;
+        }
+
+    </style>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+            <a href="/" class="button"><i class="fa fa-home"></i></a>
+            <a href="/gtts" class="button">Work Real Time</a>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <h1>AI Generative Text to Speech</h1>
+        <form id="tts-form" action="/tts" method="post" enctype="multipart/form-data">
+            <input type="text" id="text" name="text" placeholder="Enter text here" required>
+            <input type="file" id="file" name="file" accept=".wav" required>
+            <input type="text" id="language" name="language" value="en" placeholder="Language (e.g., en)">
+            <input type="submit" value="Generate Speech">
+        </form>
+        <div class="wave-container" id="wave-animation">
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+            <div class="wave"></div>
+        </div>
+        <audio id="audio-player" controls style="display: none;">
+            <source id="audio-source" src="" type="audio/wav">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+
+    
+    <script>
+        document.getElementById('tts-form').onsubmit = function (event) {
+            event.preventDefault();
+            var formData = new FormData(event.target);
+            var waveAnimation = document.getElementById('wave-animation');
+            var audioPlayer = document.getElementById('audio-player');
+
+            // Show wave animation
+            waveAnimation.style.display = 'flex';
+            audioPlayer.style.display = 'none';
+
+            fetch('/tts', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    // Hide wave animation
+                    waveAnimation.style.display = 'none';
+
+                    var url = window.URL.createObjectURL(blob);
+
+                    // Automatically download the file
+                    var a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'generated_speech.wav';
+                    document.body.appendChild(a);
+                    a.click();
+                    a.remove();
+
+                    // Play the audio
+                    var audioSource = document.getElementById('audio-source');
+                    audioSource.src = url;
+                    audioPlayer.load();
+                    audioPlayer.style.display = 'block';
+                    audioPlayer.play();
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred while generating speech.');
+                    waveAnimation.style.display = 'none';
+                });
+        };
+    </script>
+</body>
+
+</html>
