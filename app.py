@@ -4,6 +4,9 @@ from TTS.api import TTS
 from gtts import gTTS
 import os
 
+# Agree to Coqui TTS license terms
+os.environ["COQUI_LICENSE"] = "Otherwise, I agree to the terms of the non-commercial CPML: https://coqui.ai/cpml"
+
 app = Flask(__name__, static_folder='static')
 
 # Get device
